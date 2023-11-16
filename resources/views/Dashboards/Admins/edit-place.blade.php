@@ -37,6 +37,9 @@
                 <label for="">Name</label>
                 <input type="text" class="form-control" id="" placeholder="Enter Name" name="name" value={{($places->name)}}>
               </div>
+              <div class="input-group mt-3 mb-3">
+                <input type="text" class="form-control" placeholder="Phone" name="phone">
+              </div>
               <div class="form-group mt-3 mb-3">
                 <label for="">Area</label>
                 <input type="text" class="form-control" id="" placeholder="Enter Area" name="area" value={{($places->area)}}>

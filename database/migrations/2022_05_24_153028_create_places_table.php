@@ -24,10 +24,9 @@ class CreatePlacesTable extends Migration
             $table->string('area');
             $table->text('email');
             $table->string('password');
-            $table->decimal('distance', 10, 7)->nullable();
-
-
-
+            $table->string('phone_number');
+            $table->string('safety')->default('safe');
+            $table->string('access_token');
 
             $table->timestamps();
         });

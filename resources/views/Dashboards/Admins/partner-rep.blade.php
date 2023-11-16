@@ -24,6 +24,8 @@
                   <dd class="col-sm-8">{{$edit->created_at . ' GMT'}}</dd>
                   <dt class="col-sm-4">Area</dt>
                   <dd class="col-sm-8">{{$edit->area}}</dd>
+                  <dt class="col-sm-4">Phone Number</dt>
+                  <dd class="col-sm-8">{{$edit->phone_number}}</dd>
                   <dt class="col-sm-4">email</dt>
                   <dd class="col-sm-8">{{$edit->email}}</dd>
                   <dt class="col-sm-4">Latitude</dt>

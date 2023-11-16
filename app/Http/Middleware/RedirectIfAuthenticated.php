@@ -6,6 +6,7 @@ use App\Providers\RouteServiceProvider;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 
 class RedirectIfAuthenticated
 {
@@ -23,10 +24,23 @@ class RedirectIfAuthenticated
 
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
-                return redirect(RouteServiceProvider::HOME);
+                if ($guard == 'admins') {
+                    return redirect('admin/dashboard');
+                }
+    
+                if ($guard == 'web') {
+                    return redirect('user/dashboard');
+                }
+    
+                if ($guard == 'customers') {
+                    return redirect('customer/dashboard');
+                }
             }
+
         }
 
-        return $next($request);
+        return $next($request)->header('Cache-Control','no-cache, no-store, max-age=0, must-revalidate')
+                              ->header('Pragma','no-cache')
+                              ->header('Expires','Sat 01 Jan 1990 00:00:00 GMT');
     }
 }

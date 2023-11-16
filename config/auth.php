@@ -40,6 +40,16 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+
+        'admins' => [
+            'driver' => 'session',
+            'provider' => 'admins',
+        ],
+
+        'customers' => [
+            'driver' => 'session',
+            'provider' => 'customers',
+        ],
     ],
 
     /*
@@ -63,6 +73,16 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
+        ],
+
+        'admins' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Admin::class,
+        ],
+
+        'customers' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Place::class,
         ],
 
         // 'users' => [
@@ -108,7 +128,7 @@ return [
 
     'password_timeout' => 10800,
 
-
+/* 
     'admins' => [
 
         'provider' => 'admins',
@@ -119,5 +139,5 @@ return [
 
         'expire' => 60,
 
-    ],
+    ], */
 ];

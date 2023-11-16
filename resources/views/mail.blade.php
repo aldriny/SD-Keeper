@@ -1,0 +1,1 @@
+<h1>Hi, your password is {{ $details['password'] }}</h1>

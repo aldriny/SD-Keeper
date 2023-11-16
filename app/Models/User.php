@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -18,6 +19,9 @@ class User extends Authenticatable
     use Notifiable;
     use TwoFactorAuthenticatable;
 
+
+    protected $guard = 'web';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -27,6 +31,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'country',
+        'birth_date',
+        'image',
     ];
 
     /**
@@ -58,4 +65,16 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+
+
+
+    public function setBirthDateAttribute($value){
+        $this->attributes['birth_date'] = Carbon::createFromFormat('m/d/Y', $value)->format('Y-m-d');
+    }
+
+    public function rating()
+    {
+      return $this->hasMany(Rating::class);
+    }
 }

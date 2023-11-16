@@ -17,12 +17,12 @@
 <body class="hold-transition login-page">
 <div class="login-box">
   <!-- /.login-logo -->
-  <div class="card card-outline card-primary">
+  <div class="card card-outline card-orange">
     <div class="card-header text-center">
-      <a href="../../index2.html" class="h1"><b>SD</b>Keeper</a>
+      <a href="/" class="h1"><b class="text-orange">SD</b>Keeper</a>
     </div>
     <div class="card-body">
-      <p class="login-box-msg">Please Sign in</p>
+      <p class="login-box-msg">Please allow your Location</p>
 
       @if (session()->get('success'))
         <div class="alert alert-success">{{session()->get('success')}}</div>
@@ -66,19 +66,20 @@
         <div class="row">
           <!-- /.col -->
           <div class="col-12 mt-3">
-            <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+            <button type="submit" class="btn btn-block text-white" style="background: #fd7e14 !important;">Sign In</button>
           </div>
           <!-- /.col -->
         </div>
       </form>
-
- 
-
-      <p class="mb-1 mt-3">
-        <a href="forgot-password.html">I forgot my password</a>
+      <p class="mb-0 mt-3">
+        <a href="{{route('user.register1')}}"class="text-center text-orange">Register for a new membership!</a>
+      </p>
+      <hr class="mb-2">
+      <p class="mb-0">
+        <a href="{{route('user.become.partner')}}" class="text-orange">Become a Partner!</a>
       </p>
       <p class="mb-0">
-        <a href="{{route('user.register1')}}" class="text-center">Register a new membership</a>
+        <a href="{{route('customer.login1')}}"class="text-center text-orange">Login as a partner instead.</a>
       </p>
     </div>
     <!-- /.card-body -->

@@ -6,25 +6,36 @@
 
 
 <div class="container p-2 mt-3">
+    <div class="row mb-5">
+        <div class="col-md-8 offset-md-2">
+            <form action="{{route('user.search')}}">
+                <div class="input-group">
+                    <input type="search" name="search" class="form-control form-control-lg" placeholder="Search for safe places near you!">
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-lg btn-default">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
     <div class="row">
         <div class="col-12">
         <div class="card  bg-transparent">
-            <div class="card-header text-white  bg-orange">
-            <h3 class="card-title">Places near you</h3>
-            </div>
-
             <!-- /.card-header -->
-            <div class="card-body p-0 table-responsive bg-white col" style="height: 300px;" >
-            <table class="table text-nowrap table-head-fixed ">
+            <div class="card-body p-0 bg-transparent col show_card" style="height: 500px;">
+            <table class="table text-nowrap bg-transparent">
                 <thead class="text-orange">
                 <tr class="">
                     <th>Name</th>
                     <th>Location</th>
                     <th>Business Type</th>
                     <th>Distance</th>
+                    <th>Safety</th>
                 </tr>
                 </thead>
-                <tbody class="text-black" id="search-body">
+                <tbody class="search-body">
                 @foreach ($places as $place )
                     <tr>
                         <td>
@@ -35,6 +46,8 @@
                         <td>{{$place->type}}</td>
 
                         <td>{{round($place->distance,2) . ' km'}}</td>
+                        <td>{{ $place->safety }}</td>
+
 
                     </tr>
                 @endforeach 

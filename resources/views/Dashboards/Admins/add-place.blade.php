@@ -49,12 +49,7 @@
                 </div>
               </div>
               <div class="input-group mt-3 mb-3">
-                <input type="password" class="form-control" placeholder="Password" name="password">
-                <div class="input-group-append">
-                  <div class="input-group-text">
-                    <span class="fas fa-lock"></span>
-                  </div>
-                </div>
+                <input type="text" class="form-control" placeholder="Phone" name="phone">
               </div>
               <div class="row">
                 <div class="form-group col-6">
@@ -77,6 +72,7 @@
                     <option value="Café" >Café</option>
                     <option value="Hospital" >Hospital</option>
                     <option value="Store" >Store</option>
+                    <option value="Company" >Company</option>
                   </select>
                 </div>
               </div>

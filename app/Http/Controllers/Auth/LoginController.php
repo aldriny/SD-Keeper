@@ -6,12 +6,16 @@ use App\Models\Admin;
 use App\Models\Place;
 use App\Models\Edit;
 use App\Models\Partner;
+use Illuminate\Support\Str;
 
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\MailController;
+use App\Mail\MailSend;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-
+use Illuminate\Support\Facades\Mail;
 
 class LoginController extends Controller
 {  
@@ -50,56 +54,47 @@ class LoginController extends Controller
 
     function process_admin_login(Request $request){
         //Validate Requests
-        $request-> validate([
+        $credentials = $request-> validate([
             'email'=>'required|email',
             'password'=>'required|min:5|max:12',
         ]);
 
-        $userInfo = Admin::where('email','=',$request->email)->first();
-        if(!$userInfo){
-            return back()->with('fail','We do not recognize your email address');
-        }
-        else{
-            //Check Password
-            if(Hash::check($request->password, $userInfo->password)){
-                $request->session()->put('LoggedUser',$userInfo->id);
-                return redirect('admin/dashboard');
-            }
-            else{
-                return back()->with('fail','Incorrect Password');
-            }
+        if(Auth::guard('admins')->attempt($credentials)){
+            $request->session()->regenerate();
+            return redirect('admin/dashboard');
+        }else{
+            return back()->with('fail','Invalid Input');
         }
     }
+
     function admin_dashboard(){
-        $data = ['LoggedUserInfo'=>Admin::where('id','=',session('LoggedUser'))->first()];
-        return view('Dashboards.Admins.index', $data);
+        return view('Dashboards.Admins.index');
     }
 
     
-    function admin_logout(){
-        if(session()->has('LoggedUser')){
-            session()->pull('LoggedUser');
-            return redirect('admin/login');
-        }
+    function admin_logout(Request $request){
+        Auth::guard('admins')->logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return redirect()->route('admin.login1');
     }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
     function show_add_place(){
-        $data = ['LoggedUserInfo'=>Admin::where('id','=',session('LoggedUser'))->first()];
-        return view('Dashboards.Admins.add-place', $data);
+        return view('Dashboards.Admins.add-place');
     }
     function add_place(Request $request){
                 //Validate requests
                 $request -> validate([
                     'name'=>'required',
                     'area'=>'required',
-                    'email'=>'required|email|unique:places',
-                    'password'=>'required|min:5|max:12',
+                    'email'=>'required|email:filter|unique:places',
                     'long'=>'required|between:-180,180|numeric|between:0,99.99',
                     'lat'=>'required|between:-90,90|numeric|between:0,99.99',
                     'type'=>'required|not_in:0',
                     'filenames' => 'required',
                     'filenames.*' => 'image',
+                    'phone' => 'required|regex:/(20)[0-9]{9}/|min:12'
                 ]);
                 $files = [];
                 if($request->hasfile('filenames'))
@@ -111,17 +106,24 @@ class LoginController extends Controller
                         $files[] = $name;  
                     }
                  }   
+
+                $access_token = Str::random(30);
+                $password = Str::random(10);
                 //Insert data into DB
                 $place = new Place;
                 $place->name = $request->name;
                 $place->area = $request->area;
                 $place->email = $request->email;
-                $place->password = Hash::make($request->password);
+                $place->password = Hash::make($password);
+                $place->phone_number = $request->phone;
                 $place->long = $request->long;
                 $place->lat = $request->lat;
                 $place->type = $request->type;
                 $place->filenames = $files;
+                $place->access_token = $access_token;
                 $save = $place->save();
+
+                Mail::to($request->email)->send(new MailSend(['password' => $password]));
                 if($save){
                     return redirect()->route('admin.view.places')->with('success','New place has been added successfuly');
                 }
@@ -132,16 +134,12 @@ class LoginController extends Controller
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
     function view_places(){
         $places = Place::all();
-        $data = ['LoggedUserInfo'=>Admin::where('id','=',session('LoggedUser'))->first()];
-        return view('Dashboards.Admins.view-places', $data, ['places'=>$places]);
+        return view('Dashboards.Admins.view-places', ['places'=>$places]);
     }
     function show_place($id, Request $request){
 
     $places = Place::find($id);
-
-
-        $data = ['LoggedUserInfo'=>Admin::where('id','=',session('LoggedUser'))->first()];
-        return view('Dashboards.Admins.edit-place', $data, ['places'=>$places]);
+        return view('Dashboards.Admins.edit-place',['places'=>$places]);
     }
 
     function edit_place($id, Request $request){
@@ -155,6 +153,7 @@ class LoginController extends Controller
             'type'=>'required|not_in:0',
             'filenames' => 'required',
             'filenames.*' => 'image',
+            'phone' => 'required|regex:/(20)[0-9]{9}/|min:12'
         ]);
         $files = [];
         if($request->hasfile('filenames'))
@@ -168,6 +167,7 @@ class LoginController extends Controller
             }   
         //Insert data into DB
         $places->name = $request->name;
+        $places->phone_number = $request->phone;
         $places->area = $request->area;
         $places->long = $request->long;
         $places->lat = $request->lat;
@@ -191,20 +191,13 @@ class LoginController extends Controller
     function partner_req(){
 
         $become_partner = Partner::all();
-
-
-        $data = ['LoggedUserInfo'=>Admin::where('id','=',session('LoggedUser'))->first()];
-        return view('Dashboards.Admins.partner-req', $data, ['become_partner'=>$become_partner]);        
+        return view('Dashboards.Admins.partner-req',['become_partner'=>$become_partner]);        
     }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
     function partner_rep(){
     
         $edits = Edit::all();
-
-
-    
-        $data = ['LoggedUserInfo'=>Admin::where('id','=',session('LoggedUser'))->first()];
-        return view('Dashboards.Admins.partner-rep', $data, ['edits'=>$edits]);        
+        return view('Dashboards.Admins.partner-rep', ['edits'=>$edits]);        
     }
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////

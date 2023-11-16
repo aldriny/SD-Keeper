@@ -27,14 +27,13 @@
             </div>
             </div>
             <!-- /.card-header -->
-            <div class="card-body p-0 table-responsive" style="height: 300px;" >
+            <div class="card-body p-0 table-responsive" style="height: 500px;" >
             <table class="table text-nowrap table-head-fixed">
                 <thead>
                 <tr class="">
                     <th>Name</th>
                     <th>Location</th>
                     <th>Business Type</th>
-                    <th>Reviews</th>
                     <th>Edit</th>
                     <th>Delete</th>
 
@@ -48,7 +47,6 @@
                           <a target="_blank" href="{{'https://www.google.com/maps/place/' . $place->lat . ', ' . $place->long}}">View on Map</a>  
                         </td>
                         <td>{{$place['type']}}</td>
-                        <td><a href="">Reviews</a></td>
                         <td><a href="{{route('admin.show.place', [$place->id])}}">Edit</a></td>
                         <td><a href="{{route('admin.delete.place', [$place->id])}}">Delete</a></td>
                     </tr>

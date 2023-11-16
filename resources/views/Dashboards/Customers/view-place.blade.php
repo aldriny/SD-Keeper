@@ -2,44 +2,72 @@
 @section('title','SD Keeper | View My Place')
 
 @section('content')
-
 @if (session()->get('success'))
 <div class="alert alert-success">{{session()->get('success')}}</div>
 @endif
-<div class="col-12">
+<div class="col-6 mx-auto">
     <div class="card card-primary">
       <div class="card-header">
         <h4 class="card-title">{{$myPlace->name}}</h4>
       </div>
-      <div class="card-body">
-              <dl class="row">
-                <dt class="col-sm-4">Bussiness type:</dt>
-                <dd class="col-sm-8">{{$myPlace->type}}</dd>
+      <div class="card-body text-center">
+                <div class="row">
+                  <div class="col-12">
+                    <div class="bd-example container mb-3" id="place_images_slide" style="">
+                      <div id="carouselExampleCaptions" class="carousel slide" data-ride="carousel"> 
+                          <ol class="carousel-indicators">
+                              @php $filenames = json_decode($myPlace->filenames); @endphp
+                              @foreach ($filenames as $value)
+                          <li data-target="#carouselExampleCaptions" data-slide-to="{{ $loop->index }}" class="{{ $loop->first ? 'active' : '' }}"></li>
+                              @endforeach
+                          </ol>
+                          <div class="carousel-inner">
+                              @foreach( $filenames as $value )
+                              <div class="carousel-item {{ $loop->first ? 'active' : '' }}">
+                                  <img src="{{ url('files/' . $value) }}" class="d-block w-100" alt="..." height="300" width="350">
+                                  <div class="carousel-caption d-none d-md-block">
+                                  </div>
+                              </div>
+                              @endforeach
+                          </div>
+                          <a class="carousel-control-prev" href="#carouselExampleCaptions" role="button" data-slide="prev">
+                          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                          <span class="sr-only">Previous</span>
+                          </a>
+                          <a class="carousel-control-next" href="#carouselExampleCaptions" role="button" data-slide="next">
+                          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                          <span class="sr-only">Next</span>
+                          </a>
+                      </div>
+                    </div>
+                    <p class="lead text-blue text-bold">Your {{$myPlace->type}} is {{$myPlace->safety}} right now</p>
 
-                <dt class="col-sm-4">Area:</dt>
-                <dd class="col-sm-8">{{$myPlace->area . ' m2'}}</dd>
-                <dt class="col-sm-4">Show Location:</dt>
-                <dd class="col-sm-8">
-                  <a  target="_blank" href="{{'https://www.google.com/maps/place/' . $myPlace->lat . ', ' . $myPlace->long}}">
-                    Show Location
-                  </a>
-                </dd>
-                <dt class="col-sm-4">Email:</dt>
-                <dd class="col-sm-8">{{$myPlace->email}}</dd>
-                <dt class="col-sm-4">Joined at:</dt>
-                <dd class="col-sm-8">{{$myPlace->created_at . ' GMT'}}</dd>
+                    <p class="lead text-black text-bold">Business type <br><span class="text-blue">{{$myPlace->type}}</span></p>
+                    <p class="lead text-black text-bold">Total area <br><span class="text-blue">{{$myPlace->area . ' m2'}}</span></p>
+                    <p class="lead text-black text-bold">Email <br><span class="text-blue">{{$myPlace->email}}</span></p>
+
+                    <p class="lead text-black text-bold">Joined at <br><span class="text-blue">{{$myPlace->created_at . ' GMT'}}</span></p>
+                    
+                    <a class="btn-primary btn lead text-bold w-50" id="place_dir" target="_blank" href="{{'https://www.google.com/maps/place/' . $myPlace->lat . ', ' . $myPlace->long}}">Show Location</a>
+                    <br>  
+                    <a class="btn-primary btn lead text-bold mt-2 w-50" href="{{route('customer.edit')}}">Edit Request</a>
+                </div>
+
+              </div>
+
+
                 
       
-                <dt class="col-sm-4">Pictures:</dt>
+                
 
-                @php $filenames = json_decode($myPlace->filenames); @endphp
+{{--                 @php $filenames = json_decode($myPlace->filenames); @endphp
                 @foreach ($filenames as $singlefilename)
                 <div class="mr-2">
                   <a href="{{ url('files/' . $singlefilename)}}">
                     <img src="{{ url('files/' . $singlefilename) }}" width="200px" height="200px">  
                   </a>    
                 </div>
-                @endforeach
+                @endforeach --}}
 
 
               </dl>
