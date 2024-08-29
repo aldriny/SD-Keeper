@@ -1,4 +1,4 @@
-# SD Keeper (Social Distancing Keeper)
+# SD Keeper (Social Distance Keeper)
 
 SD Keeper is a comprehensive system designed to monitor social distancing and crowd levels in various locations using infrared sensors installed at entrances and exits. This Laravel-based project comprises both a website for users to access location-based safety information and a separate interface for location owners to manage and receive notifications about their premises' status.
 
